@@ -1,0 +1,55 @@
+name: Sync Search Index
+
+on:
+  # Run daily at midnight UTC
+  schedule:
+    - cron: "0 0 * * *"
+
+  # Allow manual trigger from GitHub Actions UI
+  workflow_dispatch:
+
+# No deployment permissions needed - this only calls the already-deployed
+# app's own /api/v1/* ingest endpoints over signed HTTPS requests.
+permissions:
+  contents: read
+
+# Allow only one concurrent run - the backend also mutex-checks in-progress
+# sync runs (see CLAUDE.md's "No cron trigger" section), but avoiding two
+# Actions runs racing each other client-side is cheaper than relying on the
+# 409 alone.
+concurrency:
+  group: "sync-search-index"
+  cancel-in-progress: false
+
+jobs:
+  sync-search-index:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6.5.0
+        with:
+          node-version: 24
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6.0.8
+        with:
+          version: 10.33.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Sync search index
+        env:
+          GIT_GITHUB_OWNER: ${{ secrets.GIT_GITHUB_OWNER }}
+          GIT_GITHUB_TOKEN: ${{ secrets.GIT_GITHUB_TOKEN }}
+          GIT_GITLAB_OWNER: ${{ secrets.GIT_GITLAB_OWNER }}
+          GIT_GITLAB_TOKEN: ${{ secrets.GIT_GITLAB_TOKEN }}
+          SEARCH_API_BASE_URL: ${{ secrets.SEARCH_API_BASE_URL }}
+          SEARCH_API_KEY_ID: ${{ secrets.SEARCH_API_KEY_ID }}
+          SEARCH_API_PRIVATE_KEY: ${{ secrets.SEARCH_API_PRIVATE_KEY }}
+        run: pnpm run sync-search

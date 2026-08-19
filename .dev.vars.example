@@ -1,0 +1,18 @@
+# Local development overrides for wrangler.toml [vars] and secrets.
+# Copy this file to .dev.vars and fill in real values.
+# .dev.vars is git-ignored and auto-loaded by wrangler / vite dev.
+
+# --- App ---
+PUBLIC_ORIGIN = http://localhost:5023
+IS_DEBUG      = TRUE
+
+# --- OIDC / SSO (required) — @ropean/sso-client, see https://sc.ropean.org/docs/sso-flow.md ---
+# Register a NEW OAuth client for this app (git-files) — do not reuse memos' client id,
+# redirect URIs are origin-scoped.
+OAUTH_ISSUER        = https://sso.aceapp.dev/oauth
+OAUTH_CLIENT_ID     =
+OAUTH_CLIENT_SECRET =
+
+# --- Secrets (required) ---
+# Generate with: openssl rand -hex 32
+SESSION_SECRET =

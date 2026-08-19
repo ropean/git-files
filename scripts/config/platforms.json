@@ -1,0 +1,26 @@
+{
+  "platforms": [
+    {
+      "name": "github",
+      "enabled": true,
+      "displayName": "GitHub",
+      "baseUrl": "https://api.github.com",
+      "authType": "bearer",
+      "envVars": {
+        "owner": "GIT_GITHUB_OWNER",
+        "token": "GIT_GITHUB_TOKEN"
+      }
+    },
+    {
+      "name": "gitlab",
+      "enabled": true,
+      "displayName": "GitLab",
+      "baseUrl": "https://gitlab.com/api/v4",
+      "authType": "private-token",
+      "envVars": {
+        "owner": "GIT_GITLAB_OWNER",
+        "token": "GIT_GITLAB_TOKEN"
+      }
+    }
+  ]
+}

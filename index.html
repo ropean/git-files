@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Git Files</title>
+    <meta name="description" content="Search filenames across all your Git repositories" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script>
+      (function () {
+        var m = document.cookie.match(/(?:^|;\s*)theme=([^;]+)/);
+        if (m && m[1]) document.documentElement.dataset.theme = m[1];
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/frontend/app/main.tsx"></script>
+  </body>
+</html>

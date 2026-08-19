@@ -1,0 +1,78 @@
+# --- Dependencies ---
+node_modules/
+
+# --- Build / output ---
+build/
+dist/
+.cache/
+
+# --- Cloudflare ---
+.wrangler/
+wrangler.toml
+!wrangler.toml.example
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+
+# --- Environment / secrets ---
+.env
+.env.*
+!.env.example
+*.local
+
+# --- tsc output alongside TS sources ---
+app/**/*.js
+functions/**/*.js
+tests/**/*.js
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+._*
+
+# --- Claude Code ---
+.claude/settings.local.json
+
+# --- Editors: VS Code / Cursor ---
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# --- Editors: JetBrains (WebStorm, IntelliJ) ---
+.idea/
+
+# --- Editors: Vim / Neovim ---
+*.swp
+*.swo
+*~
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+Session.vim
+Sessionx.vim
+.netrwhist
+tags
+
+# --- Editors: Emacs ---
+*~
+\#*\#
+.#*
+
+# --- Logs ---
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Testing ---
+coverage/
+
+# --- Temp / local data ---
+temp/
+
+# --- Misc ---
+*.tgz
+.turbo/

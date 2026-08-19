@@ -1,0 +1,63 @@
+{
+  "name": "git-files",
+  "private": false,
+  "sideEffects": false,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "check": "node scripts/check.mjs",
+    "db:clear": "wrangler d1 execute git-files-db --local --command \"DELETE FROM files; DELETE FROM repos; DELETE FROM sync_runs; DELETE FROM sync_keys;\"",
+    "db:clear:remote": "wrangler d1 execute git-files-db --remote --command \"DELETE FROM files; DELETE FROM repos; DELETE FROM sync_runs; DELETE FROM sync_keys;\"",
+    "db:migrate": "wrangler d1 migrations apply git-files-db --local",
+    "db:migrate:remote": "wrangler d1 migrations apply git-files-db --remote",
+    "db:reset": "rm -rf .wrangler/state/v3/d1 && pnpm db:migrate",
+    "db:seed": "wrangler d1 execute git-files-db --local --file=scripts/seed.sql",
+    "db:shell": "wrangler d1 execute git-files-db --local --command",
+    "dev": "concurrently -n vite,wrangler -c blue,green \"vite\" \"wrangler pages dev --proxy 5023 --port 8023\"",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "gen:sync-key": "node scripts/gen-sync-key.mjs",
+    "lint": "oxlint --deny-warnings .",
+    "lint:fix": "oxlint --fix .",
+    "ship": "pnpm build && wrangler pages deploy --branch main --commit-dirty=true",
+    "start": "pnpm dev",
+    "sync-search": "node scripts/sync-search-index.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "type:check": "tsc",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@noble/ed25519": "3.0.0",
+    "@ropean/sso-client": "0.0.5",
+    "@tanstack/react-query": "5.100.5",
+    "hono": "4.12.15",
+    "react": "19.2.5",
+    "react-dom": "19.2.5",
+    "react-router": "7.14.2",
+    "ulid": "3.0.2"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "4.20260423.1",
+    "@types/node": "25.6.0",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.1",
+    "concurrently": "9.2.1",
+    "dotenv": "17.4.2",
+    "husky": "9.1.7",
+    "oxlint": "1.61.0",
+    "prettier": "3.8.3",
+    "typescript": "6.0.3",
+    "vite": "8.0.10",
+    "vitest": "4.1.5",
+    "wrangler": "4.84.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "workerd"
+    ]
+  }
+}

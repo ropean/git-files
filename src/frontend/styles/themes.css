@@ -1,0 +1,83 @@
+/* Semantic theme tokens — switch by setting data-theme on <html> */
+
+[data-theme="light"] {
+  --bg-base: #f5f3f0;
+  --bg-surface: #ffffff;
+  --bg-hover: #eceae6;
+  --bg-input: #ffffff;
+  --bg-overlay: rgba(0, 0, 0, 0.04);
+  --sidebar-bg: #f5f3f0;
+
+  --border-subtle: rgba(26, 25, 23, 0.09);
+  --border-default: rgba(26, 25, 23, 0.16);
+  --border-focus: rgba(26, 25, 23, 0.3);
+
+  --text-primary: #1c1b19;
+  --text-secondary: #6b6966;
+  --text-muted: #9c9894;
+  --text-link: #4a6fa5;
+
+  --accent-bg: #1c1b19;
+  --accent-text: #f5f3f0;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.06);
+
+  --btn-bg: #1c1b19;
+  --btn-text: #f5f3f0;
+  --btn-bg-hover: rgba(28, 27, 25, 0.85);
+
+  --input-bg: var(--bg-hover);
+  --input-border: transparent;
+  --input-border-focus: var(--border-default);
+
+  --tag-bg: rgba(0, 0, 0, 0.08);
+  --tag-text: var(--text-secondary);
+
+  --color-danger: #c0392b;
+  --color-success: #27ae60;
+  --color-private: #c0392b;
+  --color-public: #27ae60;
+  --color-on-accent: #ffffff;
+}
+
+[data-theme="dark"] {
+  --bg-base: #1a1917;
+  --bg-surface: #232120;
+  --bg-hover: #2d2b29;
+  --bg-input: #232120;
+  --bg-overlay: rgba(255, 255, 255, 0.04);
+  --sidebar-bg: #1a1917;
+
+  --border-subtle: rgba(226, 224, 220, 0.09);
+  --border-default: rgba(226, 224, 220, 0.18);
+  --border-focus: rgba(226, 224, 220, 0.35);
+
+  --text-primary: #f5f3f0;
+  --text-secondary: #9c9894;
+  --text-muted: #5e5c59;
+  --text-link: #7ba7d4;
+
+  --accent-bg: #353534;
+  --accent-text: #afaeac;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.28), 0 1px 2px rgba(0, 0, 0, 0.18);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.45), 0 1px 4px rgba(0, 0, 0, 0.22);
+
+  --btn-bg: #353534;
+  --btn-text: #afaeac;
+  --btn-bg-hover: #454443;
+
+  --input-bg: var(--bg-hover);
+  --input-border: transparent;
+  --input-border-focus: var(--border-default);
+
+  --tag-bg: rgba(255, 255, 255, 0.1);
+  --tag-text: var(--text-secondary);
+
+  --color-danger: #e74c3c;
+  --color-success: #2ecc71;
+  --color-private: #e74c3c;
+  --color-public: #2ecc71;
+  --color-on-accent: #ffffff;
+}

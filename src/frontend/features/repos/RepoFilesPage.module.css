@@ -1,0 +1,278 @@
+.page {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding-top: var(--space-3);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-3);
+  flex: 1;
+  min-height: 0;
+}
+
+@media (max-width: 720px) {
+  .page {
+    height: auto;
+    display: block;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  overflow-y: auto;
+  min-height: 0;
+  padding-bottom: var(--space-2);
+}
+
+.main {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.back {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.back:hover {
+  color: var(--text-primary);
+}
+
+.repoHeading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1;
+}
+
+.title {
+  font-size: 18px;
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  line-height: 1;
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  flex-shrink: 0;
+}
+
+.badgePublic {
+  color: var(--color-public);
+}
+
+.badgePrivate {
+  color: var(--color-private);
+}
+
+.description {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.metaList {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  list-style: none;
+  padding: var(--space-2) 0;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1;
+}
+
+.languageDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.topic {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 9px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  line-height: 1.6;
+  background: var(--tag-bg);
+  color: var(--tag-text);
+}
+
+.owner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.ownerAvatar {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+}
+
+.ownerName {
+  color: var(--text-secondary);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.actions > a,
+.actions > button {
+  justify-content: flex-start;
+}
+
+.form {
+  display: flex;
+}
+
+.searchInput {
+  padding: 10px 32px;
+  font-size: 14px;
+}
+
+.results {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.status {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  padding: var(--space-3) 0;
+}
+
+.resultsCount {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  margin-bottom: var(--space-1);
+}
+
+.treeCard {
+  flex: 1;
+  min-height: 0;
+  padding: var(--space-2);
+  overflow: auto;
+}
+
+.tree {
+  list-style: none;
+}
+
+.tree .tree {
+  margin: 0;
+}
+
+.dirRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  list-style: none;
+}
+
+.dirRow::-webkit-details-marker {
+  display: none;
+}
+
+.dirRow::marker {
+  content: "";
+}
+
+.dirRow:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.dirIcon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.fileRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  line-height: 1;
+  border-radius: var(--radius-sm);
+}
+
+.fileRow:hover {
+  background: var(--bg-hover);
+}
+
+.fileIcon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.path {
+  font-family: var(--font-family-mono);
+  font-size: 13px;
+  color: var(--text-primary);
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+
+a.path:hover {
+  color: var(--text-link);
+}

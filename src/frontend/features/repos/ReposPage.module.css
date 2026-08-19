@@ -1,0 +1,127 @@
+.page {
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+.hero {
+  text-align: center;
+  padding: var(--space-6) 0 var(--space-4);
+}
+
+.titleRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: var(--space-1);
+}
+
+.title {
+  font-size: 28px;
+}
+
+.totalCount {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.scope {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-bottom: var(--space-3);
+  min-height: 1em;
+}
+
+.form {
+  display: flex;
+  justify-content: center;
+}
+
+.searchInput {
+  padding: 10px 32px;
+  font-size: 14px;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: var(--space-2);
+}
+
+.filterDivider {
+  width: 1px;
+  height: 20px;
+  background: var(--border-subtle);
+}
+
+.filterGroup {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.filterChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  border: none;
+  border-right: 1px solid var(--border-default);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+
+.filterGroup .filterChip:last-child {
+  border-right: none;
+}
+
+.filterChip:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.filterChipActive {
+  background: var(--accent-bg);
+  color: var(--accent-text);
+}
+
+.filterChipActive:hover {
+  background: var(--accent-bg);
+  color: var(--accent-text);
+  opacity: 0.85;
+}
+
+.results {
+  margin-top: var(--space-3);
+}
+
+.status {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  padding: var(--space-3) 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style: none;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: var(--space-3) 0;
+}

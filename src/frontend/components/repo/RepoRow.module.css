@@ -1,0 +1,73 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+}
+
+.repoIcon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.rowMain {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.repoName {
+  font-size: 14px;
+  color: var(--text-primary);
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+
+.repoName:hover {
+  color: var(--text-link);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--text-secondary);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  line-height: 1;
+  background: var(--tag-bg);
+  color: var(--tag-text);
+}
+
+.badgePublic {
+  color: var(--color-public);
+}
+
+.badgePrivate {
+  color: var(--color-private);
+}
+
+.fileCount {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  line-height: 1;
+}
+
+.description {
+  font-size: 12px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
