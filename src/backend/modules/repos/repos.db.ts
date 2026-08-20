@@ -83,8 +83,12 @@ export async function listRepos(db: D1Database, options: ListReposOptions = {}):
   }
 
   if (search) {
-    conditions.push("r.full_name LIKE ?");
-    params.push(`%${search}%`);
+    // Space-separated terms fuzzy-match independently (e.g. "git z" matches
+    // "git-files" via "git" AND "z" both present), not as one literal substring.
+    for (const term of search.split(/\s+/).filter(Boolean)) {
+      conditions.push("r.full_name LIKE ?");
+      params.push(`%${term}%`);
+    }
   }
 
   const where = `WHERE ${conditions.join(" AND ")}`;
