@@ -6,7 +6,13 @@ import { router } from "./router";
 import { AuthProvider } from "~/features/auth/useAuth";
 import "~/styles/global.css";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

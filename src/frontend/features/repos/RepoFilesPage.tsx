@@ -3,6 +3,7 @@ import { Link, useParams, useSearchParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "~/lib/api";
 import { Icon } from "~/components/ui/Icon";
+import { HighlightMatch } from "~/components/ui/HighlightMatch";
 import type { RepoFilesResponse, RepoFileListItem, Platform } from "@shared/types/models";
 import s from "./RepoFilesPage.module.css";
 
@@ -63,7 +64,7 @@ function sortTree(nodes: TreeNode[]) {
   for (const n of nodes) if (n.children) sortTree(n.children);
 }
 
-function TreeView({ nodes, depth }: { nodes: TreeNode[]; depth: number }) {
+function TreeView({ nodes, depth, query }: { nodes: TreeNode[]; depth: number; query: string }) {
   return (
     <ul className={s.tree}>
       {nodes.map((n) =>
@@ -74,7 +75,7 @@ function TreeView({ nodes, depth }: { nodes: TreeNode[]; depth: number }) {
                 <Icon id="folder" size={13} className={s.dirIcon} />
                 {n.name}
               </summary>
-              <TreeView nodes={n.children!} depth={depth + 1} />
+              <TreeView nodes={n.children!} depth={depth + 1} query={query} />
             </details>
           </li>
         ) : (
@@ -82,10 +83,12 @@ function TreeView({ nodes, depth }: { nodes: TreeNode[]; depth: number }) {
             <Icon id="file" size={13} className={s.fileIcon} />
             {n.url ? (
               <a href={n.url} target="_blank" rel="noopener noreferrer" className={s.path}>
-                {n.name}
+                <HighlightMatch text={n.name} query={query} />
               </a>
             ) : (
-              <span className={s.path}>{n.name}</span>
+              <span className={s.path}>
+                <HighlightMatch text={n.name} query={query} />
+              </span>
             )}
           </li>
         ),
@@ -289,7 +292,7 @@ export function RepoFilesPage() {
                 <>
                   <p className={s.resultsCount}>{q ? `${filteredFiles.length.toLocaleString()} of ${data.files.length.toLocaleString()} files` : `${filteredFiles.length.toLocaleString()} files`}</p>
                   <div className={`card ${s.treeCard}`}>
-                    <TreeView nodes={tree} depth={0} />
+                    <TreeView nodes={tree} depth={0} query={q} />
                   </div>
                 </>
               )}

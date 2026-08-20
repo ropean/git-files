@@ -60,6 +60,12 @@ pre {
   font-size: 1em;
 }
 
+mark {
+  background: var(--highlight-bg);
+  color: var(--highlight-text);
+  border-radius: 2px;
+}
+
 pre {
   background: var(--bg-hover);
   border: 1px solid var(--border-subtle);

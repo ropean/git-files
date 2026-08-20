@@ -39,6 +39,9 @@
   --color-private: #c0392b;
   --color-public: #27ae60;
   --color-on-accent: #ffffff;
+
+  --highlight-bg: rgba(230, 175, 46, 0.4);
+  --highlight-text: #1c1b19;
 }
 
 [data-theme="dark"] {
@@ -80,4 +83,7 @@
   --color-private: #e74c3c;
   --color-public: #2ecc71;
   --color-on-accent: #ffffff;
+
+  --highlight-bg: rgba(230, 175, 46, 0.55);
+  --highlight-text: #1c1b19;
 }

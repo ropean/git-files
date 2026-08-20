@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "~/features/auth/useAuth";
 import { apiFetch } from "~/lib/api";
 import { Icon } from "~/components/ui/Icon";
+import { HighlightMatch } from "~/components/ui/HighlightMatch";
 import { RepoRow } from "~/components/repo/RepoRow";
 import type { RepoStatsResponse, SearchResponse } from "@shared/types/models";
 import s from "./SearchPage.module.css";
@@ -185,10 +186,12 @@ export function SearchPage() {
                     </div>
                     {r.url ? (
                       <a href={r.url} target="_blank" rel="noopener noreferrer" className={s.path}>
-                        {r.path}
+                        <HighlightMatch text={r.path} query={q} />
                       </a>
                     ) : (
-                      <span className={s.path}>{r.path}</span>
+                      <span className={s.path}>
+                        <HighlightMatch text={r.path} query={q} />
+                      </span>
                     )}
                   </div>
                 </li>

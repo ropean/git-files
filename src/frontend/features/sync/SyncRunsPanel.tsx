@@ -13,7 +13,6 @@ export function SyncRunsPanel() {
   const { data, refetch, isFetching } = useQuery({
     queryKey: ["sync-runs"],
     queryFn: () => apiFetch<{ runs: SyncRun[] }>("/api/sync-runs?limit=20"),
-    refetchOnWindowFocus: false,
   });
 
   return (
