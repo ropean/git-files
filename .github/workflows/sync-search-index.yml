@@ -10,8 +10,11 @@ on:
 
 # No deployment permissions needed - this only calls the already-deployed
 # app's own /api/v1/* ingest endpoints over signed HTTPS requests.
+# `contents: write` is only for the keepalive commit below (updating
+# .github/last-sync.json): GitHub disables scheduled workflows after 60 days
+# without repository activity, so each run commits its own timestamp.
 permissions:
-  contents: read
+  contents: write
 
 # Allow only one concurrent run - the backend also mutex-checks in-progress
 # sync runs (see CLAUDE.md's "No cron trigger" section), but avoiding two
@@ -44,6 +47,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Sync search index
+        id: sync
         env:
           GIT_GITHUB_OWNER: ${{ secrets.GIT_GITHUB_OWNER }}
           GIT_GITHUB_TOKEN: ${{ secrets.GIT_GITHUB_TOKEN }}
@@ -53,3 +57,32 @@ jobs:
           SEARCH_API_KEY_ID: ${{ secrets.SEARCH_API_KEY_ID }}
           SEARCH_API_PRIVATE_KEY: ${{ secrets.SEARCH_API_PRIVATE_KEY }}
         run: pnpm run sync-search
+
+      # Keepalive: record this run in .github/last-sync.json and push it, so
+      # the repo always has recent activity and GitHub never auto-disables
+      # this scheduled workflow. Runs even when the sync step fails (status is
+      # recorded), but not on cancellation. main does not trigger deploy.yml
+      # (release* only); "[skip ci]" additionally skips any other CI hooks.
+      - name: Record last sync time
+        if: ${{ !cancelled() }}
+        env:
+          SYNC_STATUS: ${{ steps.sync.outcome }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          cat > .github/last-sync.json <<EOF
+          {
+            "lastRunAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "status": "${SYNC_STATUS}",
+            "trigger": "${{ github.event_name }}",
+            "runUrl": "${RUN_URL}"
+          }
+          EOF
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/last-sync.json
+          git commit -m "chore: record search index sync ${SYNC_STATUS} [skip ci]"
+          for i in 1 2 3 4; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((2 ** i))
+          done
+          exit 1
