@@ -33,7 +33,8 @@ export type IconId =
   | "external-link"
   | "home"
   | "shield"
-  | "alert-circle";
+  | "alert-circle"
+  | "copy";
 
 const ICONS: Record<IconId, { viewBox: string; content: string }> = {
   search: {
@@ -147,6 +148,10 @@ const ICONS: Record<IconId, { viewBox: string; content: string }> = {
   "alert-circle": {
     viewBox: "0 0 14 14",
     content: `<circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.1" fill="none"/><line x1="7" y1="4.2" x2="7" y2="7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="7" cy="9.8" r="0.7" fill="currentColor"/>`,
+  },
+  copy: {
+    viewBox: "0 0 16 16",
+    content: `<rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M10.5 3.5V3a1 1 0 00-1-1H3.5a1 1 0 00-1 1v6a1 1 0 001 1h.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/>`,
   },
 };
 

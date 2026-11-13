@@ -4,7 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "~/lib/api";
 import { Icon } from "~/components/ui/Icon";
 import { HighlightMatch } from "~/components/ui/HighlightMatch";
-import type { RepoFilesResponse, RepoFileListItem, Platform } from "@shared/types/models";
+import type { RepoFilesResponse, Platform } from "@shared/types/models";
+import { buildTree, formatTreeText, type TreeNode } from "./fileTree";
 import s from "./RepoFilesPage.module.css";
 
 const PLATFORM_ICONS: Record<Platform, "github" | "gitlab"> = {
@@ -24,44 +25,6 @@ async function copyText(text: string, onCopied: () => void) {
   } catch {
     // Clipboard API can be unavailable (insecure context, permissions) — silently no-op rather than throw.
   }
-}
-
-interface TreeNode {
-  name: string;
-  path: string;
-  type: "dir" | "file";
-  url?: string | null;
-  children?: TreeNode[];
-}
-
-function buildTree(files: RepoFileListItem[]): TreeNode[] {
-  const root: TreeNode[] = [];
-  const dirNodes = new Map<string, TreeNode>();
-
-  for (const f of files) {
-    const parts = f.path.split("/");
-    let siblings = root;
-    let dirPath = "";
-    for (let i = 0; i < parts.length - 1; i++) {
-      dirPath = dirPath ? `${dirPath}/${parts[i]}` : parts[i];
-      let node = dirNodes.get(dirPath);
-      if (!node) {
-        node = { name: parts[i], path: dirPath, type: "dir", children: [] };
-        dirNodes.set(dirPath, node);
-        siblings.push(node);
-      }
-      siblings = node.children!;
-    }
-    siblings.push({ name: parts[parts.length - 1], path: f.path, type: "file", url: f.url });
-  }
-
-  sortTree(root);
-  return root;
-}
-
-function sortTree(nodes: TreeNode[]) {
-  nodes.sort((a, b) => (a.type !== b.type ? (a.type === "dir" ? -1 : 1) : a.name.localeCompare(b.name)));
-  for (const n of nodes) if (n.children) sortTree(n.children);
 }
 
 function TreeView({ nodes, depth, query }: { nodes: TreeNode[]; depth: number; query: string }) {
@@ -103,6 +66,7 @@ export function RepoFilesPage() {
   const q = searchParams.get("q") ?? "";
   const [input, setInput] = useState(q);
   const [copied, setCopied] = useState(false);
+  const [treeCopied, setTreeCopied] = useState(false);
 
   useEffect(() => setInput(q), [q]);
 
@@ -290,7 +254,23 @@ export function RepoFilesPage() {
               {filteredFiles.length === 0 && !isFetching && <p className={s.status}>{q ? `No files matched "${q}".` : "No files indexed for this repo."}</p>}
               {filteredFiles.length > 0 && (
                 <>
-                  <p className={s.resultsCount}>{q ? `${filteredFiles.length.toLocaleString()} of ${data.files.length.toLocaleString()} files` : `${filteredFiles.length.toLocaleString()} files`}</p>
+                  <div className={s.resultsHeader}>
+                    <p className={s.resultsCount}>{q ? `${filteredFiles.length.toLocaleString()} of ${data.files.length.toLocaleString()} files` : `${filteredFiles.length.toLocaleString()} files`}</p>
+                    <button
+                      type="button"
+                      className="btn btn-outline btn-sm"
+                      title={q ? "Copy the filtered file tree as text" : "Copy the file tree as text"}
+                      onClick={() =>
+                        copyText(formatTreeText(tree, data.repo.fullName.split("/").pop()), () => {
+                          setTreeCopied(true);
+                          setTimeout(() => setTreeCopied(false), 1500);
+                        })
+                      }
+                    >
+                      <Icon id={treeCopied ? "check" : "copy"} size={12} />
+                      {treeCopied ? "Copied!" : "Copy tree"}
+                    </button>
+                  </div>
                   <div className={`card ${s.treeCard}`}>
                     <TreeView nodes={tree} depth={0} query={q} />
                   </div>
