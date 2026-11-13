@@ -1,6 +1,6 @@
 {
-  "lastRunAt": "2026-11-13T04:09:05Z",
+  "lastRunAt": "2026-11-13T21:53:27Z",
   "status": "success",
-  "trigger": "schedule",
-  "runUrl": "https://github.com/ropean/git-files/actions/runs/43363579901"
+  "trigger": "workflow_dispatch",
+  "runUrl": "https://github.com/ropean/git-files/actions/runs/43514545620"
 }
