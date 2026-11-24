@@ -2,7 +2,7 @@
   "include": ["env.d.ts", "**/*.ts", "**/*.tsx"],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "types": ["@cloudflare/workers-types/2023-07-01", "vitest/globals"],
+    "types": ["@cloudflare/workers-types", "vitest/globals"],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",

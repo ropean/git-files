@@ -1,4 +1,4 @@
-import { Children, cloneElement, isValidElement, useCallback, useEffect, useRef, useState } from "react";
+import { Children, cloneElement, isValidElement, useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { ReactElement, ReactNode } from "react";
 import { createPortal } from "react-dom";
 
@@ -23,17 +23,33 @@ const GAP = 6;
 const VIEWPORT_MARGIN = 6;
 const MOBILE_QUERY = "(max-width: 768px)";
 
+const hasMatchMedia = () => typeof window !== "undefined" && typeof window.matchMedia === "function";
+
+function subscribeMobile(onChange: () => void) {
+  if (!hasMatchMedia()) return () => {};
+  const mql = window.matchMedia(MOBILE_QUERY);
+  mql.addEventListener("change", onChange);
+  return () => mql.removeEventListener("change", onChange);
+}
+
+function getIsMobile() {
+  return hasMatchMedia() && window.matchMedia(MOBILE_QUERY).matches;
+}
+
 function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(() => typeof window !== "undefined" && typeof window.matchMedia === "function" && window.matchMedia(MOBILE_QUERY).matches);
-  useEffect(() => {
-    if (typeof window === "undefined" || typeof window.matchMedia !== "function") return;
-    const mql = window.matchMedia(MOBILE_QUERY);
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    setIsMobile(mql.matches);
-    mql.addEventListener("change", handler);
-    return () => mql.removeEventListener("change", handler);
-  }, []);
-  return isMobile;
+  return useSyncExternalStore(subscribeMobile, getIsMobile, () => false);
+}
+
+function assignRef<T>(ref: React.Ref<T> | undefined, node: T) {
+  if (typeof ref === "function") ref(node);
+  else if (ref && typeof ref === "object") (ref as React.MutableRefObject<T>).current = node;
+}
+
+// Clones `element` with `extraProps` inside its own component so the event
+// handlers (which touch refs) are passed as JSX props rather than through a
+// render-time cloneElement() call in Tooltip — keeps react(refs) lint happy.
+function CloneWithProps({ element, extraProps }: { element: ReactElement; extraProps: Record<string, unknown> }) {
+  return cloneElement(element, extraProps);
 }
 
 export function Tooltip({ label, children, delay = SHOW_DELAY, disabled }: TooltipProps) {
@@ -59,11 +75,7 @@ export function Tooltip({ label, children, delay = SHOW_DELAY, disabled }: Toolt
         ref?: React.Ref<HTMLElement>;
         props?: { ref?: React.Ref<HTMLElement> };
       };
-      const childRef = elementWithRef.ref ?? elementWithRef.props?.ref;
-      if (typeof childRef === "function") childRef(node);
-      else if (childRef && typeof childRef === "object") {
-        (childRef as React.MutableRefObject<HTMLElement | null>).current = node;
-      }
+      assignRef(elementWithRef.ref ?? elementWithRef.props?.ref, node);
     },
     [child],
   );
@@ -141,19 +153,11 @@ export function Tooltip({ label, children, delay = SHOW_DELAY, disabled }: Toolt
     child.props.onBlur?.(e);
   };
 
-  const cloned = cloneElement(child, {
-    ref: setRef,
-    onMouseEnter: handleMouseEnter,
-    onMouseLeave: handleMouseLeave,
-    onFocus: handleFocus,
-    onBlur: handleBlur,
-  });
-
   if (!isValidElement(child)) return child;
 
   return (
     <>
-      {cloned}
+      <CloneWithProps element={child} extraProps={{ ref: setRef, onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave, onFocus: handleFocus, onBlur: handleBlur }} />
       {open && typeof document !== "undefined"
         ? createPortal(
             <div

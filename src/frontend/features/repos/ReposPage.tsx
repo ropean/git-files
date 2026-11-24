@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "~/features/auth/useAuth";
@@ -24,7 +24,13 @@ export function ReposPage() {
   const offset = Number(searchParams.get("offset")) || 0;
   const [input, setInput] = useState(q);
 
-  useEffect(() => setInput(q), [q]);
+  // Re-sync the input when the URL's q changes (back/forward, links) —
+  // adjusted during render rather than in an effect, per React docs.
+  const [syncedQ, setSyncedQ] = useState(q);
+  if (q !== syncedQ) {
+    setSyncedQ(q);
+    setInput(q);
+  }
 
   const { data, isFetching, error } = useQuery({
     queryKey: ["repos", q, effectiveVisibility, effectivePlatform, offset, Boolean(user)],

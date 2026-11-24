@@ -30,37 +30,47 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
+async function loadAuthUser(): Promise<AuthUser | null> {
+  try {
+    const res = await fetch("/auth/me");
+    const data = (await res.json()) as MeResponse | null;
+    return data
+      ? {
+          sub: data.sub,
+          username: data.username ?? data.preferred_username ?? null,
+          displayName: data.name ?? null,
+          email: data.email ?? null,
+          picture: data.picture ?? null,
+          org_id: data.org_id ?? null,
+          role: data.role ?? null,
+        }
+      : null;
+  } catch {
+    return null;
+  }
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchAuth = async () => {
-    try {
-      const res = await fetch("/auth/me");
-      const data = (await res.json()) as MeResponse | null;
-      setUser(
-        data
-          ? {
-              sub: data.sub,
-              username: data.username ?? data.preferred_username ?? null,
-              displayName: data.name ?? null,
-              email: data.email ?? null,
-              picture: data.picture ?? null,
-              org_id: data.org_id ?? null,
-              role: data.role ?? null,
-            }
-          : null,
-      );
-    } catch {
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
+  const refetchAuth = async () => {
+    const next = await loadAuthUser();
+    setUser(next);
+    setLoading(false);
   };
 
   useEffect(() => {
-    fetchAuth();
+    let cancelled = false;
+    loadAuthUser().then((next) => {
+      if (cancelled) return;
+      setUser(next);
+      setLoading(false);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  return <AuthContext.Provider value={{ user, loading, refetchAuth: fetchAuth }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, loading, refetchAuth }}>{children}</AuthContext.Provider>;
 }

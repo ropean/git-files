@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "~/features/auth/useAuth";
 import { SyncKeysPanel } from "~/features/sync/SyncKeysPanel";
 import { SyncRunsPanel } from "~/features/sync/SyncRunsPanel";
@@ -16,14 +16,17 @@ export function SettingsPage() {
   const { user, loading } = useAuth();
   const [tab, setTab] = useState<TabId>("keys");
 
+  useEffect(() => {
+    if (!loading && !user) {
+      window.location.href = `/auth/login?return_to=${encodeURIComponent(window.location.pathname)}`;
+    }
+  }, [loading, user]);
+
   if (loading) {
     return <div className={s.loading}>Loading...</div>;
   }
 
-  if (!user) {
-    window.location.href = `/auth/login?return_to=${encodeURIComponent(window.location.pathname)}`;
-    return null;
-  }
+  if (!user) return null;
 
   return (
     <div className={s.page}>

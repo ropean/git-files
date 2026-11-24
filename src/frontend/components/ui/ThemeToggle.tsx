@@ -1,14 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Icon } from "~/components/ui/Icon";
 import { Tooltip } from "~/components/ui/Tooltip";
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-
-  useEffect(() => {
-    const current = document.documentElement.getAttribute("data-theme") as "dark" | "light";
-    setTheme(current ?? "dark");
-  }, []);
+  const [theme, setTheme] = useState<"dark" | "light">(() => (document.documentElement.getAttribute("data-theme") as "dark" | "light" | null) ?? "dark");
 
   function toggle() {
     const next = theme === "dark" ? "light" : "dark";

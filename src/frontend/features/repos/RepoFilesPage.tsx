@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "~/lib/api";
@@ -68,7 +68,13 @@ export function RepoFilesPage() {
   const [copied, setCopied] = useState(false);
   const [treeCopied, setTreeCopied] = useState(false);
 
-  useEffect(() => setInput(q), [q]);
+  // Re-sync the input when the URL's q changes (back/forward, links) —
+  // adjusted during render rather than in an effect, per React docs.
+  const [syncedQ, setSyncedQ] = useState(q);
+  if (q !== syncedQ) {
+    setSyncedQ(q);
+    setInput(q);
+  }
 
   const { data, isFetching, error } = useQuery({
     queryKey: ["repo-files", fullName],
